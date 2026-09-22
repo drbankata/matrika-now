@@ -1,0 +1,10 @@
+# Allowlist: ignore everything, then publish only the site's own files.
+# To publish a new asset, add a "!/filename" line here on purpose.
+/*
+!/.gitignore
+!/README.md
+!/CNAME
+!/index.html
+!/logo.png
+!/favicon.png
+!/workshop.jpg

@@ -12,7 +12,9 @@
   /* ---------- SETTINGS (edit here) ----------
      Paste each detail between the quotes as soon as Malvika sends it. Anything left empty
      simply stays hidden, and "Book a session" buttons go to the Contact page instead.     */
-  var BOOKING_URL    = "";  /* e.g. "https://calendly.com/malvika/first-conversation" */
+  var BOOKING_URL    = "https://fullcurebank.vercel.app/p/matrika-now";  /* sessions + booking page */
+  var WORKSHOP_URL   = "https://fullcurebank.vercel.app/p/matrika-now/programme/hh_goals_to_systems";  /* workshop "Reserve your spot" */
+  var REFLECTION_URL = "https://fullcurebank.vercel.app/p/matrika-now/programme/hh_self_discovery_7";  /* button under a reflection result */
   var EMAIL          = "";  /* e.g. "hello@matrikanow.com" */
   var WHATSAPP       = "";  /* digits only, with country code, e.g. "919812345678" */
   var PHONE          = "";  /* as it should be shown, e.g. "+91 98123 45678" */
@@ -20,7 +22,7 @@
   var FACEBOOK       = "";  /* full page link */
   var YOUTUBE        = "";  /* full channel link */
   var FORM_URL       = "";  /* optional Google Form link: contact form sends people there */
-  var NEWSLETTER_URL = "";  /* optional sign-up page link (Mailchimp, Substack, Google Form...) */
+  var NEWSLETTER_URL = "https://fullcurebank.vercel.app/care/register";  /* optional sign-up page link */
   var SITE = "https://matrikanow.com/";
 
   /* ---------- Contact details: show only what has been filled in ---------- */
@@ -46,6 +48,9 @@
   /* "Book a session": booking link when set, otherwise the Contact page (already in the HTML) */
   function bookTo(a) { if (BOOKING_URL) external(a, BOOKING_URL); }
   document.querySelectorAll("[data-book]").forEach(bookTo);
+  /* Workshop "Reserve your spot": its programme link when set, otherwise the Contact page (in the HTML) */
+  function workshopTo(a) { if (WORKSHOP_URL) external(a, WORKSHOP_URL); }
+  document.querySelectorAll("[data-workshop]").forEach(workshopTo);
 
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
@@ -213,6 +218,8 @@
      ===================================================================== */
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function bookHref(label) { return BOOKING_URL || ROOT + "contact/?about=" + encodeURIComponent(label); }
+  /* The result button opens the self-discovery programme when set. Nothing about the result is sent. */
+  function reflectTo(a) { if (REFLECTION_URL) external(a, REFLECTION_URL); else bookTo(a); }
   function shareRow(text, url) {
     var wa = "https://wa.me/?text=" + encodeURIComponent(text + " " + url);
     return '<a class="btn btn-soft" href="' + wa + '" target="_blank" rel="noopener">Share on WhatsApp</a>' +
@@ -257,6 +264,7 @@
       var p = document.createElement("p"); p.style.marginTop = "14px"; p.appendChild(again);
       root.querySelector(".result").appendChild(p);
       root.querySelectorAll("[data-book]").forEach(bookTo);
+      root.querySelectorAll("[data-reflect]").forEach(reflectTo);
       setTimeout(function () { root.querySelectorAll("[data-w]").forEach(function (b) { b.style.width = b.getAttribute("data-w"); }); }, 60);
       var h = root.querySelector(".rname"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
       root.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -329,7 +337,7 @@
         '<p class="essence">' + get(".essence") + '</p><p class="balance">' + get(".balance") + '</p>' +
         '<div class="box"><p class="shadow-line">' + get(".shadow-line") + '</p><p class="ask">' + get(".ask") + '</p></div>' +
         (s[next] > 0 ? '<p class="also">A strong second thread in you: <strong>' + esc(nextName) + '</strong>. <a href="#a-' + next + '">Read about it</a></p>' : "") +
-        '<div class="cta-row"><a class="btn btn-coral" data-book href="' + bookHref("archetype reflection result: " + name) + '">Explore this with Malvika</a>' + shareRow(text, SITE + "archetypes/#quiz") + '</div>' +
+        '<div class="cta-row"><a class="btn btn-coral" data-reflect href="' + bookHref("archetype reflection result: " + name) + '">Explore this with Malvika</a>' + shareRow(text, SITE + "archetypes/#quiz") + '</div>' +
         '<p class="small">Archetypes are mirrors, not boxes. Most of us carry several; this simply shows the one that is loudest right now.</p></div>';
     });
     var aAfterText = "";
@@ -374,7 +382,7 @@
         '<div class="bars" role="img" aria-label="' + D.map(function (k) { return nm(k) + " " + pcts[k] + "%"; }).join(", ") + '">' + bars + '</div>' +
         '<div class="box"><p><strong>You may recognise yourself if</strong> ' + get("[data-recognise]") + '</p><p><strong>A small ritual</strong> ' + get("[data-ritual]") + '</p></div>' +
         (dual ? '<p class="also">Two energies are close in you, so read about <a href="#d-' + top + '">' + esc(nm(top)) + '</a> and <a href="#d-' + sec + '">' + esc(nm(sec)) + '</a>.</p>' : "") +
-        '<div class="cta-row"><a class="btn btn-coral" data-book href="' + bookHref("dosha reflection result: " + label) + '">Explore this with Malvika</a>' + shareRow(dText, SITE + "doshas/#quiz") + '</div>' +
+        '<div class="cta-row"><a class="btn btn-coral" data-reflect href="' + bookHref("dosha reflection result: " + label) + '">Explore this with Malvika</a>' + shareRow(dText, SITE + "doshas/#quiz") + '</div>' +
         '<p class="small">Most of us carry all three, in our own proportion. This is a gentle reflection, not a medical assessment.</p></div>';
     });
     dRoot._after = function () {

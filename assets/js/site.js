@@ -25,6 +25,17 @@
   var NEWSLETTER_URL = "https://fullcurebank.vercel.app/care/register";  /* optional sign-up page link */
   var SITE = "https://matrikanow.com/";
 
+  /* ---------- PAYMENTS (Razorpay Payment Pages) ----------
+     Malvika creates one Payment Page per offering in the Razorpay Dashboard (Payment Pages >
+     Create) and copies its link (https://rzp.io/... or https://pages.razorpay.com/...).
+     Paste each link below. An empty slot keeps its "Pay now" button hidden. No keys or
+     secrets ever go in this file: the repo is public and a Payment Page link is public anyway. */
+  var PAY_SESSION_URL  = "";  /* 1:1 work  (Work with us page) */
+  var PAY_GROUP_URL    = "";  /* Group spaces & journeys  (Work with us page) */
+  var PAY_COURSE_URL   = "";  /* Courses & learning containers  (Work with us page) */
+  var PAY_WORKSHOP_URL = "";  /* current workshop  (Home + Workshops pages, next to "Reserve your spot") */
+  var PAY_LABEL        = "";  /* button wording once Malvika approves it; empty = "Pay now" */
+
   /* ---------- Contact details: show only what has been filled in ---------- */
   var LINKS = {
     booking: BOOKING_URL,
@@ -51,6 +62,16 @@
   /* Workshop "Reserve your spot": its programme link when set, otherwise the Contact page (in the HTML) */
   function workshopTo(a) { if (WORKSHOP_URL) external(a, WORKSHOP_URL); }
   document.querySelectorAll("[data-workshop]").forEach(workshopTo);
+
+  /* "Pay now": shown only when its Payment Page link is filled in above (buttons ship hidden) */
+  var PAY = { session: PAY_SESSION_URL, group: PAY_GROUP_URL, course: PAY_COURSE_URL, workshop: PAY_WORKSHOP_URL };
+  document.querySelectorAll("[data-pay]").forEach(function (a) {
+    var url = PAY[a.getAttribute("data-pay")];
+    if (!url || !/^https:\/\//.test(url)) return;
+    external(a, url);
+    if (PAY_LABEL) a.textContent = PAY_LABEL;
+    a.hidden = false;
+  });
 
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
